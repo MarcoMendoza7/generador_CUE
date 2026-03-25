@@ -20,7 +20,7 @@ const estados = [
 ];
 
 const CUEForm = ({ formData, onChange }) => {
-  const isMatriculaInvalid = formData.matricula.length > 0 && !/^\d{9}$/.test(formData.matricula);
+  const isMatriculaIncomplete = formData.matricula.length > 0 && formData.matricula.length !== 9;
 
   return (
     <div className="form-container">
@@ -41,15 +41,23 @@ const CUEForm = ({ formData, onChange }) => {
         {estados.map(e => <option key={e.code} value={e.code}>{e.name}</option>)}
       </select>
 
-      <input 
-        type="text" 
-        name="matricula" 
-        placeholder="Matrícula (9 dígitos)" 
-        className={isMatriculaInvalid ? 'error' : ''}
-        value={formData.matricula} 
-        onChange={onChange} 
-      />
-      {isMatriculaInvalid && <p className="error-msg">La matrícula debe ser de 9 números.</p>}
+      <div className="input-group" style={{ gridColumn: 'span 2' }}>
+        <input 
+          type="text" 
+          name="matricula" 
+          placeholder="Matrícula (9 dígitos)" 
+          maxLength={9}
+          className={isMatriculaIncomplete ? 'error' : ''}
+          value={formData.matricula} 
+          onChange={onChange} 
+          style={{ width: '100%' }}
+        />
+        {isMatriculaIncomplete && (
+          <p className="error-msg" style={{ margin: '5px 0 0 0' }}>
+            Faltan dígitos (deben ser exactamente 9)
+          </p>
+        )}
+      </div>
     </div>
   );
 };
